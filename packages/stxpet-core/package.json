@@ -1,6 +1,6 @@
 {
   "name": "@winsznx/stxpet-core",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "State parsers and transaction builders for the StxPet on-chain tamagotchi",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
