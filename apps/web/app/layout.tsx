@@ -8,6 +8,10 @@ export const metadata: Metadata = {
   title: 'StxPet — The On-Chain Tamagotchi',
   description:
     'A community-owned digital pet living on the Stacks blockchain. Feed it. Play with it. Keep it alive.',
+  other: {
+    'talentapp:project_verification':
+      '62e0bc54c4244b372ecf7fcdf583afe972961dbb6dbedab5169c62e659c7db55b6de4288d613cc7199710197074193772e57ee478f18ff37647f86a92cc733b0',
+  },
   openGraph: {
     title: 'StxPet — The On-Chain Tamagotchi',
     description: 'A community-owned digital pet living on the Stacks blockchain.',
