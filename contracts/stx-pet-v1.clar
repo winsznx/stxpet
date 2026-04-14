@@ -1,7 +1,7 @@
-;; StxPet — The Collaborative On-Chain Tamagotchi
+;; StxPet - The Collaborative On-Chain Tamagotchi
 ;; A community-owned digital pet on Stacks Mainnet
 
-;; ── Constants ──
+;; Constants
 (define-constant MAX-METER u100)
 (define-constant FEED-BOOST u20)
 (define-constant PLAY-BOOST u20)
@@ -11,10 +11,10 @@
 (define-constant ERR-PET-DEAD (err u100))
 (define-constant ERR-ALREADY-DEAD (err u101))
 
-;; ── NFT ──
+;; NFT
 (define-non-fungible-token stxpet-survivor uint)
 
-;; ── Data Variables ──
+;; Data Variables
 (define-data-var pet-hunger uint u100)
 (define-data-var pet-happiness uint u100)
 (define-data-var pet-energy uint u100)
@@ -24,10 +24,10 @@
 (define-data-var total-rounds uint u0)
 (define-data-var nft-counter uint u0)
 
-;; ── Maps ──
+;; Maps
 (define-map round-winners uint principal)
 
-;; ── Private: Decay Logic ──
+;; Private: Decay Logic
 (define-private (compute-decayed-meter (current-value uint) (blocks-elapsed uint))
   (let ((decay (* DECAY-RATE (/ blocks-elapsed DECAY-INTERVAL))))
     (if (> decay current-value) u0 (- current-value decay))
@@ -53,7 +53,7 @@
   )
 )
 
-;; ── Private: Death + Reset ──
+;; Private: Death + Reset
 (define-private (trigger-death)
   (begin
     (var-set pet-alive false)
@@ -73,7 +73,7 @@
   (if (<= a b) a b)
 )
 
-;; ── Private: Interaction Helper ──
+;; Private: Interaction Helper
 (define-private (apply-interaction
   (meters { hunger: uint, happiness: uint, energy: uint })
   (boost-hunger uint)
@@ -90,7 +90,7 @@
   )
 )
 
-;; ── Public Functions ──
+;; Public Functions
 (define-public (feed)
   (let ((meters (get-current-meters)))
     (if (is-dead meters)
@@ -132,7 +132,7 @@
   )
 )
 
-;; ── Read-Only Functions ──
+;; Read-Only Functions
 (define-read-only (get-raw-state)
   {
     hunger: (var-get pet-hunger),
