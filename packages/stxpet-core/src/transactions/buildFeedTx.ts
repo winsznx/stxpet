@@ -3,7 +3,7 @@ import { ContractCallOptions } from '../types';
 export function buildFeedTx(
   contractDeployer: string,
   contractName: string,
-  network: unknown
+  network: string
 ): ContractCallOptions {
   return {
     contractAddress: contractDeployer,
