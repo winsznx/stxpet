@@ -8,10 +8,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@stacks/connect": "^7.8.0",
-    "@stacks/connect-react": "^23.1.6",
-    "@stacks/network": "^6.17.0",
-    "@stacks/transactions": "^6.17.0",
+    "@stacks/connect": "^8.2.6",
+    "@stacks/network": "^7.3.1",
+    "@stacks/transactions": "^7.4.0",
     "@vercel/og": "^0.6.0",
     "@winsznx/stxpet-core": "workspace:*",
     "next": "14.2.29",
