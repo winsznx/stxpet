@@ -1,26 +1,54 @@
 'use client';
 
-import { useConnect } from '@stacks/connect-react';
+import { useState, useEffect } from 'react';
+import { connect, disconnect, isConnected } from '@stacks/connect';
 import { userSession } from './session';
 
 function truncateAddress(address: string): string {
-  return `${address.slice(0, 6)}…${address.slice(-4)}`;
+  return `${address.slice(0, 6)}...${address.slice(-4)}`;
+}
+
+function getAddress(): string | null {
+  try {
+    if (userSession.isUserSignedIn()) {
+      return userSession.loadUserData().profile.stxAddress.mainnet;
+    }
+  } catch {
+    // not signed in
+  }
+  return null;
 }
 
 export function WalletConnectButton() {
-  const { doOpenAuth } = useConnect();
+  const [connected, setConnected] = useState(false);
+  const [address, setAddress] = useState<string | null>(null);
 
-  const isSignedIn = userSession.isUserSignedIn();
-  const address = isSignedIn
-    ? userSession.loadUserData().profile.stxAddress.mainnet
-    : null;
+  useEffect(() => {
+    const walletConnected = isConnected();
+    setConnected(walletConnected);
+    if (walletConnected) {
+      setAddress(getAddress());
+    }
+  }, []);
+
+  async function handleConnect() {
+    try {
+      await connect();
+      setConnected(true);
+      setAddress(getAddress());
+    } catch {
+      // user cancelled
+    }
+  }
 
   function handleDisconnect() {
-    userSession.signUserOut();
+    disconnect();
+    setConnected(false);
+    setAddress(null);
     window.location.reload();
   }
 
-  if (isSignedIn && address) {
+  if (connected && address) {
     return (
       <button
         onClick={handleDisconnect}
@@ -59,7 +87,7 @@ export function WalletConnectButton() {
 
   return (
     <button
-      onClick={() => doOpenAuth()}
+      onClick={handleConnect}
       style={{
         fontFamily: "'JetBrains Mono', monospace",
         fontSize: '0.85rem',
