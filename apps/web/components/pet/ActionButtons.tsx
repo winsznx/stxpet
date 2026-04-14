@@ -44,16 +44,11 @@ function ActionButton({
     if (disabled) return;
     setIsPending(true);
     try {
-      await ACTION_CALLS[action]({
-        onFinish: () => {
-          setIsPending(false);
-          onActionComplete();
-        },
-        onCancel: () => {
-          setIsPending(false);
-        },
-      });
+      await ACTION_CALLS[action]();
+      onActionComplete();
     } catch {
+      // user cancelled or tx failed
+    } finally {
       setIsPending(false);
     }
   }
@@ -105,7 +100,7 @@ function ActionButton({
       }}
     >
       {isPending ? (
-        <span style={{ display: 'inline-block', animation: 'spin 1s linear infinite' }}>⟳</span>
+        <span style={{ display: 'inline-block', animation: 'spin 1s linear infinite' }}>&#x27F3;</span>
       ) : isConnected ? (
         ACTION_LABELS[action]
       ) : (
