@@ -23,5 +23,5 @@ export interface ContractCallOptions {
   contractName: string;
   functionName: string;
   functionArgs: readonly unknown[];
-  network: unknown;
+  network: string;
 }
