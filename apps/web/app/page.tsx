@@ -1,18 +1,23 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+import { isConnected as checkWalletConnected } from '@stacks/connect';
 import { usePetState } from '@/hooks/usePetState';
 import { PetDisplay } from '@/components/pet/PetDisplay';
 import { MeterBar } from '@/components/pet/MeterBar';
 import { ActionButtons } from '@/components/pet/ActionButtons';
 import { DeathOverlay } from '@/components/pet/DeathOverlay';
 import { WalletConnectButton } from '@/components/wallet/WalletConnectButton';
-import { userSession } from '@/components/wallet/session';
 import { MAX_METER } from '@/lib/constants';
 import Link from 'next/link';
 
 export default function HomePage() {
   const { petState, isLoading, isDead, error, refetch } = usePetState();
-  const isConnected = userSession.isUserSignedIn();
+  const [walletConnected, setWalletConnected] = useState(false);
+
+  useEffect(() => {
+    setWalletConnected(checkWalletConnected());
+  }, []);
 
   if (isLoading && !petState) {
     return (
@@ -61,7 +66,7 @@ export default function HomePage() {
         <DeathOverlay
           lastInteractor={null}
           roundNumber={petState.totalRounds}
-          isConnected={isConnected}
+          isConnected={walletConnected}
           onNewRound={refetch}
         />
       )}
@@ -75,7 +80,6 @@ export default function HomePage() {
           transition: 'border-color 0.3s ease',
         }}
       >
-        {/* Header */}
         <header
           style={{
             display: 'flex',
@@ -111,12 +115,10 @@ export default function HomePage() {
           <WalletConnectButton />
         </header>
 
-        {/* Pet Display */}
         {petState && (
           <>
             <PetDisplay isAlive={petState.isAlive} isDangerZone={petState.isDangerZone} />
 
-            {/* Meters */}
             <div style={{ margin: '32px 0' }}>
               <MeterBar
                 label="Hunger"
@@ -138,10 +140,8 @@ export default function HomePage() {
               />
             </div>
 
-            {/* Action Buttons */}
-            <ActionButtons isConnected={isConnected} onActionComplete={refetch} />
+            <ActionButtons isConnected={walletConnected} onActionComplete={refetch} />
 
-            {/* Footer Link */}
             <div style={{ textAlign: 'center', marginTop: 40 }}>
               <Link
                 href="/leaderboard"
@@ -159,7 +159,7 @@ export default function HomePage() {
                   e.currentTarget.style.color = '#5a5a7a';
                 }}
               >
-                View Leaderboard →
+                View Leaderboard &rarr;
               </Link>
             </div>
           </>
