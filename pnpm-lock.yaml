@@ -18,11 +18,11 @@ importers:
   apps/bot:
     dependencies:
       '@stacks/network':
-        specifier: ^6.17.0
-        version: 6.17.0
+        specifier: ^7.3.1
+        version: 7.3.1
       '@stacks/transactions':
-        specifier: ^6.17.0
-        version: 6.17.0
+        specifier: ^7.4.0
+        version: 7.4.0
       '@winsznx/stxpet-core':
         specifier: workspace:*
         version: link:../../packages/stxpet-core
@@ -40,17 +40,14 @@ importers:
   apps/web:
     dependencies:
       '@stacks/connect':
-        specifier: ^7.8.0
-        version: 7.10.2
-      '@stacks/connect-react':
-        specifier: ^23.1.6
-        version: 23.1.6(@types/react@18.3.28)(lit@3.3.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)(zod@3.22.4)
+        specifier: ^8.2.6
+        version: 8.2.6(@types/react@18.3.28)(lit@3.3.0)(react@18.3.1)(typescript@5.9.3)(zod@3.22.4)
       '@stacks/network':
-        specifier: ^6.17.0
-        version: 6.17.0
+        specifier: ^7.3.1
+        version: 7.3.1
       '@stacks/transactions':
-        specifier: ^6.17.0
-        version: 6.17.0
+        specifier: ^7.4.0
+        version: 7.4.0
       '@vercel/og':
         specifier: ^0.6.0
         version: 0.6.8
@@ -83,11 +80,11 @@ importers:
   packages/stxpet-core:
     dependencies:
       '@stacks/network':
-        specifier: ^6.17.0
-        version: 6.17.0
+        specifier: ^7.3.1
+        version: 7.3.1
       '@stacks/transactions':
-        specifier: ^6.17.0
-        version: 6.17.0
+        specifier: ^7.4.0
+        version: 7.4.0
     devDependencies:
       typescript:
         specifier: ^5.7.0
@@ -310,17 +307,11 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@scure/base@1.1.9':
-    resolution: {integrity: sha512-8YKhl8GHiNI/pU2VMaofa2Tor7PJRAjwQLBBuilkJ9L5+13yVbC7JO/wS7piioAvPSwR3JKM1IJ/u4xQzbcXKg==}
-
   '@scure/base@1.2.6':
     resolution: {integrity: sha512-g/nm5FgUa//MCj1gV09zTJTaM6KBAHqLN907YVQqf7zC49+DcO4B1so4ZX07Ef10Twr6nuqYEH9GEggFXA4Fmg==}
 
   '@scure/bip32@1.7.0':
     resolution: {integrity: sha512-E4FFX/N3f4B80AKWp5dP6ow+flD1LQZo/w8UnLGYZO674jS6YnYeepycOOksv+vLPSpgN35wgKgy+ybfTb2SMw==}
-
-  '@scure/bip39@1.1.0':
-    resolution: {integrity: sha512-pwrPOS16VeTKg98dYXQyIjJEcWfz7/1YJIwxUEPFfQPtc86Ym/1sVgQ2RLoD43AazMk2l/unK4ITySSpW2+82w==}
 
   '@scure/bip39@1.6.0':
     resolution: {integrity: sha512-+lF0BbLiJNwVlev4eKelw1WWLaiKXw7sSl8T6FvBlWkdX+94aGJ4o8XjUdlyhTCjd8c+B3KT3JfS8P0bLRNU6A==}
@@ -330,35 +321,17 @@ packages:
     engines: {node: '>= 8.0.0'}
     hasBin: true
 
-  '@stacks/auth@7.4.0':
-    resolution: {integrity: sha512-2nEPQuhJMifxX7YhuaI1Qn7D0Bjvdav3cmQQXF6PGA/MKIQniExhvHKhuGrshMaJ2OUui+lJxFWA8RCyJVd5ow==}
-
   '@stacks/common@6.16.0':
     resolution: {integrity: sha512-PnzvhrdGRMVZvxTulitlYafSK4l02gPCBBoI9QEoTqgSnv62oaOXhYAUUkTMFKxdHW1seVEwZsrahuXiZPIAwg==}
 
   '@stacks/common@7.3.1':
     resolution: {integrity: sha512-29ANTFcSSlXnGQlgDVWg7OQ74lgQhu3x8JkeN19Q+UE/1lbQrzcctgPHG74XHjWNp8NPBqskUYA8/HLgIKuKNQ==}
 
-  '@stacks/connect-react@23.1.6':
-    resolution: {integrity: sha512-fQqnzkMvvMAaNWkWqHo167yxI11r6Dpc5hHLZecq85TH32aOPgcBEdgFaI4YtaeGMLsJGQJVFiFp211A8xG80g==}
-    peerDependencies:
-      react: ^16.x || 17.x || 18.x
-      react-dom: ^16.x || 17.x || 18.x
-
-  '@stacks/connect-ui@6.6.0':
-    resolution: {integrity: sha512-uc22RH99umYzB94h5LiKPtGu34IBGrwUb3TfijGb2ZMudaMCiv/Fr1jjZKfQW5MRmexnbAEmGZpFlQKinCcsUA==}
-
   '@stacks/connect-ui@8.1.2':
     resolution: {integrity: sha512-C3T1QmEGJocnmsamQnKJvlvHFfjr/FDebLSokrAAwTr6x76JPS5xuACB7u3a7+vVMUdINV+pFvfn442oic2R5w==}
 
-  '@stacks/connect@7.10.2':
-    resolution: {integrity: sha512-fQcdayBgq9XZnX4rqQxa//Gx9c0ycrmrZT9dZ01uHDlIr/ZxwU18d5A3hyYv4F7LQYQQkFr9htpVTlH0RSqWUw==}
-
   '@stacks/connect@8.2.6':
     resolution: {integrity: sha512-MXkMVIDPPQLlL83UKb3rNdm7Gh/LQGdPhSsq+sL36KCM6qM1by8+igxX/R/5G+rgn6KdCG+iIRTh4TkAqntrTg==}
-
-  '@stacks/encryption@7.4.0':
-    resolution: {integrity: sha512-jrxgHui3P8M2o2sXs01cAd9uJ6JrtB0g6BDBSKj6K40zvlBbEOiki4wXYQNC3g3AmO73Udv31EhCQrWZtwZspA==}
 
   '@stacks/network@6.17.0':
     resolution: {integrity: sha512-numHbfKjwco/rbkGPOEz8+FcJ2nBnS/tdJ8R422Q70h3SiA9eqk9RjSzB8p4JP8yW1SZvW+eihADHfMpBuZyfw==}
@@ -374,11 +347,6 @@ packages:
 
   '@stacks/transactions@7.4.0':
     resolution: {integrity: sha512-scsQO3rSNNKcPHp56Wy5OeZiIpQNmmZOORz8bkQKWjzvzycAodtSWmAoHiMFAKSleR1NyeRIz642fReqlZU9tw==}
-
-  '@stencil/core@2.22.3':
-    resolution: {integrity: sha512-kmVA0M/HojwsfkeHsifvHVIYe4l5tin7J5+DLgtl8h6WWfiMClND5K3ifCXXI2ETDNKiEk21p6jql3Fx9o2rng==}
-    engines: {node: '>=12.10.0', npm: '>=6.0.0'}
-    hasBin: true
 
   '@stencil/core@4.43.4':
     resolution: {integrity: sha512-QWawMM1XIpSz4k+k+VyHZMr2YSxlCNAPWO/jTdJ+2kdgdN7ZQVEFZpc4WBm3E3mrDPTZ79lLcnIPa399bg4XOg==}
@@ -1230,10 +1198,6 @@ packages:
   require-main-filename@2.0.0:
     resolution: {integrity: sha512-NKN5kMDylKuldxYLSUfrbo5Tuzh4hd+2E8NPPX02mZtn1VuREQToYe/ZdlJy+J3uCpfaiGF05e7B8W0iXbQHmg==}
 
-  ripemd160-min@0.0.6:
-    resolution: {integrity: sha512-+GcJgQivhs6S9qvLogusiTcS9kQUfgR75whKuy5jIhuiOfQuJ8fjqxV6EGD5duH1Y/FawFUMtMhyeq3Fbnib8A==}
-    engines: {node: '>=8'}
-
   ripemd160@2.0.3:
     resolution: {integrity: sha512-5Di9UC0+8h1L6ZD2d7awM7E/T4uA1fJRlx6zk/NvdCCVEoAnFqvHmCuNeIKoCeIixBX/q8uM+6ycDvF8woqosA==}
     engines: {node: '>= 0.8'}
@@ -2058,20 +2022,13 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.44.0':
     optional: true
 
-  '@scure/base@1.1.9': {}
-
   '@scure/base@1.2.6': {}
 
   '@scure/bip32@1.7.0':
     dependencies:
-      '@noble/curves': 1.9.1
+      '@noble/curves': 1.9.2
       '@noble/hashes': 1.8.0
       '@scure/base': 1.2.6
-
-  '@scure/bip39@1.1.0':
-    dependencies:
-      '@noble/hashes': 1.1.5
-      '@scure/base': 1.1.9
 
   '@scure/bip39@1.6.0':
     dependencies:
@@ -2083,18 +2040,6 @@ snapshots:
       fflate: 0.7.4
       string.prototype.codepointat: 0.2.1
 
-  '@stacks/auth@7.4.0':
-    dependencies:
-      '@noble/secp256k1': 1.7.1
-      '@stacks/common': 7.3.1
-      '@stacks/encryption': 7.4.0
-      '@stacks/network': 7.3.1
-      '@stacks/profile': 7.4.0
-      cross-fetch: 3.2.0
-      jsontokens: 4.0.1
-    transitivePeerDependencies:
-      - encoding
-
   '@stacks/common@6.16.0':
     dependencies:
       '@types/bn.js': 5.2.0
@@ -2102,60 +2047,9 @@ snapshots:
 
   '@stacks/common@7.3.1': {}
 
-  '@stacks/connect-react@23.1.6(@types/react@18.3.28)(lit@3.3.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)(zod@3.22.4)':
-    dependencies:
-      '@stacks/connect': 8.2.6(@types/react@18.3.28)(lit@3.3.0)(react@18.3.1)(typescript@5.9.3)(zod@3.22.4)
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-    transitivePeerDependencies:
-      - '@azure/app-configuration'
-      - '@azure/cosmos'
-      - '@azure/data-tables'
-      - '@azure/identity'
-      - '@azure/keyvault-secrets'
-      - '@azure/storage-blob'
-      - '@capacitor/preferences'
-      - '@deno/kv'
-      - '@netlify/blobs'
-      - '@planetscale/database'
-      - '@react-native-async-storage/async-storage'
-      - '@types/react'
-      - '@upstash/redis'
-      - '@vercel/blob'
-      - '@vercel/functions'
-      - '@vercel/kv'
-      - aws4fetch
-      - bufferutil
-      - db0
-      - encoding
-      - ioredis
-      - lit
-      - typescript
-      - uploadthing
-      - utf-8-validate
-      - zod
-
-  '@stacks/connect-ui@6.6.0':
-    dependencies:
-      '@stencil/core': 2.22.3
-
   '@stacks/connect-ui@8.1.2':
     dependencies:
       '@stencil/core': 4.43.4
-
-  '@stacks/connect@7.10.2':
-    dependencies:
-      '@stacks/auth': 7.4.0
-      '@stacks/common': 7.3.1
-      '@stacks/connect-ui': 6.6.0
-      '@stacks/network': 7.3.1
-      '@stacks/network-v6': '@stacks/network@6.17.0'
-      '@stacks/profile': 7.4.0
-      '@stacks/transactions': 7.4.0
-      '@stacks/transactions-v6': '@stacks/transactions@6.17.0'
-      jsontokens: 4.0.1
-    transitivePeerDependencies:
-      - encoding
 
   '@stacks/connect@8.2.6(@types/react@18.3.28)(lit@3.3.0)(react@18.3.1)(typescript@5.9.3)(zod@3.22.4)':
     dependencies:
@@ -2198,17 +2092,6 @@ snapshots:
       - uploadthing
       - utf-8-validate
       - zod
-
-  '@stacks/encryption@7.4.0':
-    dependencies:
-      '@noble/hashes': 1.1.5
-      '@noble/secp256k1': 1.7.1
-      '@scure/bip39': 1.1.0
-      '@stacks/common': 7.3.1
-      base64-js: 1.5.1
-      bs58: 5.0.0
-      ripemd160-min: 0.0.6
-      varuint-bitcoin: 1.1.2
 
   '@stacks/network@6.17.0':
     dependencies:
@@ -2256,8 +2139,6 @@ snapshots:
       lodash.clonedeep: 4.5.0
     transitivePeerDependencies:
       - encoding
-
-  '@stencil/core@2.22.3': {}
 
   '@stencil/core@4.43.4':
     optionalDependencies:
@@ -2777,6 +2658,7 @@ snapshots:
   bs58@5.0.0:
     dependencies:
       base-x: 4.0.1
+    optional: true
 
   bs58@6.0.0:
     dependencies:
@@ -3443,8 +3325,6 @@ snapshots:
 
   require-main-filename@2.0.0: {}
 
-  ripemd160-min@0.0.6: {}
-
   ripemd160@2.0.3:
     dependencies:
       hash-base: 3.1.2
@@ -3673,6 +3553,7 @@ snapshots:
   varuint-bitcoin@1.1.2:
     dependencies:
       safe-buffer: 5.2.1
+    optional: true
 
   viem@2.31.0(typescript@5.9.3)(zod@3.22.4):
     dependencies:
