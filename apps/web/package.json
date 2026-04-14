@@ -1,0 +1,27 @@
+{
+  "name": "web",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@stacks/connect": "^7.8.0",
+    "@stacks/connect-react": "^23.1.6",
+    "@stacks/network": "^6.17.0",
+    "@stacks/transactions": "^6.17.0",
+    "@vercel/og": "^0.6.0",
+    "@winsznx/stxpet-core": "workspace:*",
+    "next": "14.2.29",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "typescript": "^5.7.0"
+  }
+}
