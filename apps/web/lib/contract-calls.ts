@@ -1,59 +1,44 @@
-import { openContractCall } from '@stacks/connect';
+import { request } from '@stacks/connect';
 import { CONTRACT_DEPLOYER, CONTRACT_NAME, NETWORK } from './constants';
 
-interface ContractCallCallbacks {
-  onFinish?: (data: { txId: string }) => void;
-  onCancel?: () => void;
-}
+const CONTRACT_ID = `${CONTRACT_DEPLOYER}.${CONTRACT_NAME}` as `${string}.${string}`;
 
-function getNetwork(): 'mainnet' | 'testnet' {
-  return NETWORK === 'mainnet' ? 'mainnet' : 'testnet';
-}
-
-export async function callFeed({ onFinish, onCancel }: ContractCallCallbacks = {}): Promise<void> {
-  await openContractCall({
-    contractAddress: CONTRACT_DEPLOYER,
-    contractName: CONTRACT_NAME,
+export async function callFeed(): Promise<{ txId: string }> {
+  const response = await request('stx_callContract', {
+    contract: CONTRACT_ID,
     functionName: 'feed',
     functionArgs: [],
-    network: getNetwork(),
-    onFinish: onFinish ? (data) => onFinish({ txId: data.txId }) : undefined,
-    onCancel,
+    network: NETWORK as 'mainnet' | 'testnet',
   });
+  return { txId: response.txid ?? '' };
 }
 
-export async function callPlay({ onFinish, onCancel }: ContractCallCallbacks = {}): Promise<void> {
-  await openContractCall({
-    contractAddress: CONTRACT_DEPLOYER,
-    contractName: CONTRACT_NAME,
+export async function callPlay(): Promise<{ txId: string }> {
+  const response = await request('stx_callContract', {
+    contract: CONTRACT_ID,
     functionName: 'play',
     functionArgs: [],
-    network: getNetwork(),
-    onFinish: onFinish ? (data) => onFinish({ txId: data.txId }) : undefined,
-    onCancel,
+    network: NETWORK as 'mainnet' | 'testnet',
   });
+  return { txId: response.txid ?? '' };
 }
 
-export async function callSleep({ onFinish, onCancel }: ContractCallCallbacks = {}): Promise<void> {
-  await openContractCall({
-    contractAddress: CONTRACT_DEPLOYER,
-    contractName: CONTRACT_NAME,
+export async function callSleep(): Promise<{ txId: string }> {
+  const response = await request('stx_callContract', {
+    contract: CONTRACT_ID,
     functionName: 'sleep',
     functionArgs: [],
-    network: getNetwork(),
-    onFinish: onFinish ? (data) => onFinish({ txId: data.txId }) : undefined,
-    onCancel,
+    network: NETWORK as 'mainnet' | 'testnet',
   });
+  return { txId: response.txid ?? '' };
 }
 
-export async function callStartNewRound({ onFinish, onCancel }: ContractCallCallbacks = {}): Promise<void> {
-  await openContractCall({
-    contractAddress: CONTRACT_DEPLOYER,
-    contractName: CONTRACT_NAME,
+export async function callStartNewRound(): Promise<{ txId: string }> {
+  const response = await request('stx_callContract', {
+    contract: CONTRACT_ID,
     functionName: 'start-new-round',
     functionArgs: [],
-    network: getNetwork(),
-    onFinish: onFinish ? (data) => onFinish({ txId: data.txId }) : undefined,
-    onCancel,
+    network: NETWORK as 'mainnet' | 'testnet',
   });
+  return { txId: response.txid ?? '' };
 }
