@@ -1,0 +1,18 @@
+{
+  "name": "@winsznx/stxpet-core",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "pnpm run build"
+  },
+  "dependencies": {
+    "@stacks/transactions": "^6.17.0",
+    "@stacks/network": "^6.17.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}
