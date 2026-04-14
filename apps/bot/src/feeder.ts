@@ -1,12 +1,9 @@
 import {
   makeContractCall,
   broadcastTransaction,
-  AnchorMode,
 } from '@stacks/transactions';
-import { StacksMainnet } from '@stacks/network';
+import { STACKS_MAINNET } from '@stacks/network';
 import { PetAction, buildFeedTx, buildPlayTx, buildSleepTx } from '@winsznx/stxpet-core';
-
-const network = new StacksMainnet();
 
 const TX_BUILDERS: Record<PetAction, typeof buildFeedTx> = {
   feed: buildFeedTx,
@@ -20,23 +17,22 @@ export async function submitAction(
   contractDeployer: string,
   contractName: string
 ): Promise<string> {
-  const txOptions = TX_BUILDERS[action](contractDeployer, contractName, network);
+  const txOptions = TX_BUILDERS[action](contractDeployer, contractName, 'mainnet');
 
   const transaction = await makeContractCall({
     ...txOptions,
     functionArgs: [],
     senderKey: privateKey,
-    network,
-    anchorMode: AnchorMode.Any,
+    network: STACKS_MAINNET,
   });
 
-  const response = await broadcastTransaction(transaction, network);
+  const result = await broadcastTransaction({ transaction });
 
-  if ('error' in response) {
-    throw new Error(`Broadcast failed: ${response.error} - ${response.reason}`);
+  if ('error' in result) {
+    throw new Error(`Broadcast failed: ${(result as { error: string; reason: string }).error} - ${(result as { error: string; reason: string }).reason}`);
   }
 
-  const txid = typeof response === 'string' ? response : response.txid;
+  const txid = typeof result === 'string' ? result : (result as { txid: string }).txid;
   console.log(`[${new Date().toISOString()}] Action: ${action} | txid: ${txid}`);
   return txid;
 }
