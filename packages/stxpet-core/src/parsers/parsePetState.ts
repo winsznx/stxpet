@@ -1,10 +1,6 @@
 import { ClarityValue, cvToValue } from '@stacks/transactions';
 import { RawPetState } from '../types';
 
-interface ClarityTupleData {
-  [key: string]: ClarityValue;
-}
-
 export function parsePetState(clarityValue: ClarityValue): RawPetState {
   const data = cvToValue(clarityValue) as {
     hunger: bigint | number;
