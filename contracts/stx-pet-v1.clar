@@ -18,7 +18,7 @@
 (define-data-var pet-hunger uint u100)
 (define-data-var pet-happiness uint u100)
 (define-data-var pet-energy uint u100)
-(define-data-var last-interaction-block uint block-height)
+(define-data-var last-interaction-block uint tenure-height)
 (define-data-var pet-alive bool true)
 (define-data-var last-interactor (optional principal) none)
 (define-data-var total-rounds uint u0)
@@ -36,7 +36,7 @@
 
 (define-private (get-current-meters)
   (let (
-    (elapsed (- block-height (var-get last-interaction-block)))
+    (elapsed (- tenure-height (var-get last-interaction-block)))
     (hunger (compute-decayed-meter (var-get pet-hunger) elapsed))
     (happiness (compute-decayed-meter (var-get pet-happiness) elapsed))
     (energy (compute-decayed-meter (var-get pet-energy) elapsed))
@@ -84,7 +84,7 @@
     (var-set pet-hunger (min-uint MAX-METER (+ (get hunger meters) boost-hunger)))
     (var-set pet-happiness (min-uint MAX-METER (+ (get happiness meters) boost-happiness)))
     (var-set pet-energy (min-uint MAX-METER (+ (get energy meters) boost-energy)))
-    (var-set last-interaction-block block-height)
+    (var-set last-interaction-block tenure-height)
     (var-set last-interactor (some tx-sender))
     (ok true)
   )
@@ -124,7 +124,7 @@
     (var-set pet-hunger u100)
     (var-set pet-happiness u100)
     (var-set pet-energy u100)
-    (var-set last-interaction-block block-height)
+    (var-set last-interaction-block tenure-height)
     (var-set pet-alive true)
     (var-set last-interactor none)
     (var-set total-rounds (+ (var-get total-rounds) u1))
@@ -152,7 +152,7 @@
       energy: (get energy meters),
       last-interaction-block: (var-get last-interaction-block),
       pet-alive: (if (is-dead meters) false (var-get pet-alive)),
-      current-block: block-height,
+      current-block: tenure-height,
       total-rounds: (var-get total-rounds)
     }
   )
