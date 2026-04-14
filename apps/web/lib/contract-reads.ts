@@ -1,22 +1,19 @@
 import {
-  callReadOnlyFunction,
-  ClarityValue,
+  fetchCallReadOnlyFunction,
   cvToValue,
-  uintCV,
+  Cl,
 } from '@stacks/transactions';
-import { StacksMainnet } from '@stacks/network';
+import { STACKS_MAINNET } from '@stacks/network';
 import { parsePetState, computeCurrentMeters, LivePetState } from '@winsznx/stxpet-core';
 import { CONTRACT_DEPLOYER, CONTRACT_NAME } from './constants';
 
-const network = new StacksMainnet();
-
 export async function fetchLiveState(): Promise<LivePetState> {
-  const result = await callReadOnlyFunction({
+  const result = await fetchCallReadOnlyFunction({
     contractAddress: CONTRACT_DEPLOYER,
     contractName: CONTRACT_NAME,
     functionName: 'get-live-state',
     functionArgs: [],
-    network,
+    network: STACKS_MAINNET,
     senderAddress: CONTRACT_DEPLOYER,
   });
 
@@ -25,12 +22,12 @@ export async function fetchLiveState(): Promise<LivePetState> {
 }
 
 export async function fetchRoundWinner(round: number): Promise<string | null> {
-  const result = await callReadOnlyFunction({
+  const result = await fetchCallReadOnlyFunction({
     contractAddress: CONTRACT_DEPLOYER,
     contractName: CONTRACT_NAME,
     functionName: 'get-round-winner',
-    functionArgs: [uintCV(round)],
-    network,
+    functionArgs: [Cl.uint(round)],
+    network: STACKS_MAINNET,
     senderAddress: CONTRACT_DEPLOYER,
   });
 
