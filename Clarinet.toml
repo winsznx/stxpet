@@ -1,0 +1,11 @@
+[project]
+name = "stxpet"
+description = ""
+authors = []
+telemetry = true
+cache_dir = "./.cache"
+
+[contracts.stx-pet-v1]
+path = "contracts/stx-pet-v1.clar"
+clarity_version = 3
+epoch = 3.0
