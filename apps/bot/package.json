@@ -1,0 +1,19 @@
+{
+  "name": "stxpet-bot",
+  "private": true,
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "dev": "ts-node --watch src/index.ts",
+    "build": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@stacks/transactions": "^6.17.0",
+    "@stacks/network": "^6.17.0",
+    "@winsznx/stxpet-core": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "ts-node": "^10.9.0",
+    "@types/node": "^20.0.0"
+  }
+}
