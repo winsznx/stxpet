@@ -11,7 +11,7 @@ interface DeathOverlayProps {
 }
 
 function truncateAddress(address: string): string {
-  return `${address.slice(0, 6)}…${address.slice(-4)}`;
+  return `${address.slice(0, 6)}...${address.slice(-4)}`;
 }
 
 export function DeathOverlay({ lastInteractor, roundNumber, isConnected, onNewRound }: DeathOverlayProps) {
@@ -22,16 +22,11 @@ export function DeathOverlay({ lastInteractor, roundNumber, isConnected, onNewRo
     if (buttonDisabled) return;
     setIsPending(true);
     try {
-      await callStartNewRound({
-        onFinish: () => {
-          setIsPending(false);
-          onNewRound();
-        },
-        onCancel: () => {
-          setIsPending(false);
-        },
-      });
+      await callStartNewRound();
+      onNewRound();
     } catch {
+      // user cancelled or tx failed
+    } finally {
       setIsPending(false);
     }
   }
@@ -53,7 +48,7 @@ export function DeathOverlay({ lastInteractor, roundNumber, isConnected, onNewRo
         gap: 24,
       }}
     >
-      <div style={{ fontSize: '5rem', lineHeight: 1 }}>☠</div>
+      <div style={{ fontSize: '5rem', lineHeight: 1 }}>&#x2620;</div>
       <h1
         style={{
           fontFamily: "'JetBrains Mono', monospace",
@@ -115,7 +110,7 @@ export function DeathOverlay({ lastInteractor, roundNumber, isConnected, onNewRo
           }
         }}
       >
-        {isPending ? '⟳' : 'START NEW ROUND'}
+        {isPending ? '...' : 'START NEW ROUND'}
       </button>
     </div>
   );
