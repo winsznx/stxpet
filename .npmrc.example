@@ -1,0 +1,2 @@
+; copy to .npmrc and fill in your npm auth token
+; //registry.npmjs.org/:_authToken=YOUR_TOKEN_HERE
