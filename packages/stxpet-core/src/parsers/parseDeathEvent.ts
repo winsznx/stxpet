@@ -1,15 +1,3 @@
-interface NftMintEvent {
-  event_type: string;
-  asset: {
-    asset_event_type: string;
-    asset_id: string;
-    recipient: string;
-    value: {
-      repr: string;
-    };
-  };
-}
-
 interface ContractEvent {
   event_type: string;
   asset?: {
