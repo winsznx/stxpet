@@ -18,6 +18,14 @@ export interface LivePetState extends RawPetState {
 
 export type PetAction = 'feed' | 'play' | 'sleep';
 
+/**
+ * Options for calling a contract function.
+ * @property contractAddress - Address of the target contract.
+ * @property contractName - Name of the contract.
+ * @property functionName - Name of the function to invoke.
+ * @property functionArgs - Arguments for the function call.
+ * @property network - Network identifier (e.g., "mainnet", "testnet").
+ */
 export interface ContractCallOptions {
   contractAddress: string;
   contractName: string;
