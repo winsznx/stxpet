@@ -6,6 +6,7 @@
     "dev": "turbo run dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
+    "format": "turbo run format",
     "bot:start": "pnpm --filter stxpet-bot start",
     "publish:core": "pnpm --filter @winsznx/stxpet-core publish --access public"
   },
