@@ -71,6 +71,8 @@ export default function HomePage() {
         />
       )}
       <div
+        role="main"
+        aria-label="Pet interaction area"
         style={{
           minHeight: '100vh',
           maxWidth: 520,
@@ -81,6 +83,8 @@ export default function HomePage() {
         }}
       >
         <header
+          role="banner"
+          aria-label="App header"
           style={{
             display: 'flex',
             justifyContent: 'space-between',
