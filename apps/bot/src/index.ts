@@ -46,6 +46,7 @@ async function main(): Promise<void> {
   log(`Polling every ${BOT_POLL_INTERVAL_MS}ms`);
   log(`Thresholds — Hunger: ${BOT_HUNGER_THRESHOLD} | Happiness: ${BOT_HAPPINESS_THRESHOLD} | Energy: ${BOT_ENERGY_THRESHOLD}`);
 
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     try {
       await runCycle();
