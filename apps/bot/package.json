@@ -4,7 +4,9 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "dev": "ts-node --watch src/index.ts",
-    "build": "tsc --noEmit"
+    "build": "tsc --noEmit",
+    "lint": "eslint src/**/*.ts",
+    "format": "prettier --write src/**/*.ts"
   },
   "dependencies": {
     "@stacks/network": "^7.3.1",
