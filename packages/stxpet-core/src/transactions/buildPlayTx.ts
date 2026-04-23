@@ -1,5 +1,11 @@
-import { ContractCallOptions } from '../types';
+import { ContractCallOptions } from "../types";
 
+/**
+ * Builds a contract call options object for the "play" action.
+ * @param contractDeployer - The address of the contract deployer.
+ * @param contractName - The name of the contract.
+ * @param network - The network to target ("mainnet", "testnet", etc.).
+ */
 export function buildPlayTx(
   contractDeployer: string,
   contractName: string,
@@ -8,7 +14,7 @@ export function buildPlayTx(
   return {
     contractAddress: contractDeployer,
     contractName,
-    functionName: 'play',
+    functionName: "play",
     functionArgs: [],
     network,
   };
