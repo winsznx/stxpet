@@ -1,35 +1,39 @@
+/**
+ * Represents the raw state of a pet as returned from the smart contract.
+ */
 export interface RawPetState {
-  hunger: number;
-  happiness: number;
-  energy: number;
-  lastInteractionBlock: number;
-  isAlive: boolean;
-  currentBlock: number;
-  totalRounds: number;
+  readonly hunger: number;
+  readonly happiness: number;
+  readonly energy: number;
+  readonly lastInteractionBlock: number;
+  readonly isAlive: boolean;
+  readonly currentBlock: number;
+  readonly totalRounds: number;
 }
 
+/**
+ * Represents the live state of a pet, including decay-adjusted values.
+ */
 export interface LivePetState extends RawPetState {
-  effectiveHunger: number;
-  effectiveHappiness: number;
-  effectiveEnergy: number;
-  blocksUntilNextDecay: number;
-  isDangerZone: boolean;
+  readonly effectiveHunger: number;
+  readonly effectiveHappiness: number;
+  readonly effectiveEnergy: number;
+  readonly blocksUntilNextDecay: number;
+  readonly isDangerZone: boolean;
 }
 
+/**
+ * Valid actions that can be performed on a pet.
+ */
 export type PetAction = 'feed' | 'play' | 'sleep';
 
 /**
  * Options for calling a contract function.
- * @property contractAddress - Address of the target contract.
- * @property contractName - Name of the contract.
- * @property functionName - Name of the function to invoke.
- * @property functionArgs - Arguments for the function call.
- * @property network - Network identifier (e.g., "mainnet", "testnet").
  */
 export interface ContractCallOptions {
-  contractAddress: string;
-  contractName: string;
-  functionName: string;
-  functionArgs: readonly unknown[];
-  network: string;
+  readonly contractAddress: string;
+  readonly contractName: string;
+  readonly functionName: string;
+  readonly functionArgs: readonly unknown[];
+  readonly network: string;
 }
