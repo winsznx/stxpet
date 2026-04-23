@@ -1,23 +1,34 @@
+/**
+ * Structure of a Stacks contract event related to assets.
+ */
 interface ContractEvent {
-  event_type: string;
-  asset?: {
-    asset_event_type?: string;
-    asset_id?: string;
-    recipient?: string;
-    value?: {
-      repr?: string;
+  readonly event_type: string;
+  readonly asset?: {
+    readonly asset_event_type?: string;
+    readonly asset_id?: string;
+    readonly recipient?: string;
+    readonly value?: {
+      readonly repr?: string;
     };
   };
 }
 
+/**
+ * Result of a parsed death event.
+ */
 export interface DeathEvent {
-  winner: string;
-  tokenId: number;
-  roundNumber: number;
+  readonly winner: string;
+  readonly tokenId: number;
+  readonly roundNumber: number;
 }
 
+/**
+ * Parses contract events to find and extract the pet death (NFT mint) event.
+ * @param events - List of events from a transaction.
+ * @param contractIdentifier - The identifier of the StxPet contract.
+ */
 export function parseDeathEvent(
-  events: ContractEvent[],
+  events: readonly ContractEvent[],
   contractIdentifier: string
 ): DeathEvent | null {
   const nftMint = events.find(
@@ -31,7 +42,14 @@ export function parseDeathEvent(
     return null;
   }
 
-  const tokenId = parseInt(nftMint.asset.value.repr.replace('u', ''), 10);
+  // Clarity uint representation is "u123"
+  const tokenIdStr = nftMint.asset.value.repr.startsWith('u') 
+    ? nftMint.asset.value.repr.slice(1) 
+    : nftMint.asset.value.repr;
+    
+  const tokenId = parseInt(tokenIdStr, 10);
+
+  if (isNaN(tokenId)) return null;
 
   return {
     winner: nftMint.asset.recipient,
