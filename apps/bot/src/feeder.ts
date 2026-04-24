@@ -1,38 +1,45 @@
-import {
-  makeContractCall,
-  broadcastTransaction,
+import { 
+  makeContractCall, 
+  broadcastTransaction, 
+  SignedContractCallOptions,
+  AnchorMode
 } from '@stacks/transactions';
-import { STACKS_MAINNET } from '@stacks/network';
-import { PetAction, buildFeedTx, buildPlayTx, buildSleepTx } from '@winsznx/stxpet-core';
+import { STACKS_MAINNET, STACKS_TESTNET } from '@stacks/network';
+import { LogLevel, log } from './logger';
 
-const TX_BUILDERS: Record<PetAction, typeof buildFeedTx> = {
-  feed: buildFeedTx,
-  play: buildPlayTx,
-  sleep: buildSleepTx,
-};
+export type PetAction = 'feed' | 'play' | 'sleep';
 
 export async function submitAction(
   action: PetAction,
   privateKey: string,
   contractDeployer: string,
-  contractName: string
+  contractName: string,
+  network: string = 'mainnet'
 ): Promise<string> {
-  const txOptions = TX_BUILDERS[action](contractDeployer, contractName, 'mainnet');
-
-  const transaction = await makeContractCall({
-    ...txOptions,
+  const txOptions: SignedContractCallOptions = {
+    contractAddress: contractDeployer,
+    contractName,
+    functionName: action,
     functionArgs: [],
     senderKey: privateKey,
-    network: STACKS_MAINNET,
-  });
+    validateWithAbi: true,
+    network: network === 'mainnet' ? STACKS_MAINNET : STACKS_TESTNET,
+    anchorMode: AnchorMode.Any,
+  };
 
-  const result = await broadcastTransaction({ transaction });
+  try {
+    const transaction = await makeContractCall(txOptions);
+    const broadcastResponse = await broadcastTransaction(transaction, txOptions.network);
+    
+    if ('error' in broadcastResponse) {
+      throw new Error(`Broadcast failed: ${broadcastResponse.error} ${broadcastResponse.reason || ''}`);
+    }
 
-  if ('error' in result) {
-    throw new Error(`Broadcast failed: ${(result as { error: string; reason: string }).error} - ${(result as { error: string; reason: string }).reason}`);
+    log(`Action submitted: ${action} | txid: ${broadcastResponse.txid}`, LogLevel.INFO);
+    return broadcastResponse.txid;
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    log(`Failed to submit ${action}: ${msg}`, LogLevel.ERROR);
+    throw err;
   }
-
-  const txid = typeof result === 'string' ? result : (result as { txid: string }).txid;
-  console.log(`[${new Date().toISOString()}] Action: ${action} | txid: ${txid}`);
-  return txid;
 }
