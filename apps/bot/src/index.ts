@@ -1,60 +1,50 @@
+import { loadConfig } from './config';
 import { fetchLiveState } from './monitor';
 import { submitAction } from './feeder';
+import { LogLevel, log } from './logger';
+import { wait } from './utils/wait';
 
-const BOT_PRIVATE_KEY = process.env.BOT_PRIVATE_KEY!;
-const CONTRACT_DEPLOYER = process.env.CONTRACT_DEPLOYER!;
-const CONTRACT_NAME = process.env.CONTRACT_NAME || 'stx-pet-v1';
-const BOT_HUNGER_THRESHOLD = Number(process.env.BOT_HUNGER_THRESHOLD || '30');
-const BOT_HAPPINESS_THRESHOLD = Number(process.env.BOT_HAPPINESS_THRESHOLD || '30');
-const BOT_ENERGY_THRESHOLD = Number(process.env.BOT_ENERGY_THRESHOLD || '30');
-const BOT_POLL_INTERVAL_MS = Number(process.env.BOT_POLL_INTERVAL_MS || '60000');
-
-function log(message: string): void {
-  console.log(`[${new Date().toISOString()}] ${message}`);
-}
-
-async function runCycle(): Promise<void> {
-  const state = await fetchLiveState(CONTRACT_DEPLOYER, CONTRACT_NAME);
+async function runCycle(config: ReturnType<typeof loadConfig>): Promise<void> {
+  const state = await fetchLiveState(config.contractDeployer, config.contractName, config.network);
 
   if (!state.isAlive) {
-    log('Pet is dead, waiting for new round');
+    log('Pet is dead, waiting for new round', LogLevel.WARN);
     return;
   }
 
-  log(
-    `State — Hunger: ${state.effectiveHunger} | Happiness: ${state.effectiveHappiness} | Energy: ${state.effectiveEnergy} | Block: ${state.currentBlock}`
-  );
+  log(`Status | H: ${state.effectiveHunger} | HP: ${state.effectiveHappiness} | E: ${state.effectiveEnergy}`);
 
-  if (state.effectiveHunger < BOT_HUNGER_THRESHOLD) {
-    log(`Hunger below threshold (${state.effectiveHunger} < ${BOT_HUNGER_THRESHOLD}), feeding...`);
-    await submitAction('feed', BOT_PRIVATE_KEY, CONTRACT_DEPLOYER, CONTRACT_NAME);
+  if (state.effectiveHunger < config.hungerThreshold) {
+    await submitAction('feed', config.privateKey, config.contractDeployer, config.contractName, config.network);
   }
-
-  if (state.effectiveHappiness < BOT_HAPPINESS_THRESHOLD) {
-    log(`Happiness below threshold (${state.effectiveHappiness} < ${BOT_HAPPINESS_THRESHOLD}), playing...`);
-    await submitAction('play', BOT_PRIVATE_KEY, CONTRACT_DEPLOYER, CONTRACT_NAME);
+  if (state.effectiveHappiness < config.happinessThreshold) {
+    await submitAction('play', config.privateKey, config.contractDeployer, config.contractName, config.network);
   }
-
-  if (state.effectiveEnergy < BOT_ENERGY_THRESHOLD) {
-    log(`Energy below threshold (${state.effectiveEnergy} < ${BOT_ENERGY_THRESHOLD}), sleeping...`);
-    await submitAction('sleep', BOT_PRIVATE_KEY, CONTRACT_DEPLOYER, CONTRACT_NAME);
+  if (state.effectiveEnergy < config.energyThreshold) {
+    await submitAction('sleep', config.privateKey, config.contractDeployer, config.contractName, config.network);
   }
 }
 
-async function main(): Promise<void> {
-  log('StxPet Bot starting...');
-  log(`Polling every ${BOT_POLL_INTERVAL_MS}ms`);
-  log(`Thresholds — Hunger: ${BOT_HUNGER_THRESHOLD} | Happiness: ${BOT_HAPPINESS_THRESHOLD} | Energy: ${BOT_ENERGY_THRESHOLD}`);
-
-  // eslint-disable-next-line no-constant-condition
-  while (true) {
-    try {
-      await runCycle();
-    } catch (error) {
-      log(`Error in cycle: ${error instanceof Error ? error.message : String(error)}`);
+async function main() {
+  try {
+    const config = loadConfig();
+    log('StxPet Bot started');
+    
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      try {
+        await runCycle(config);
+      } catch (err) {
+        log(`Cycle failed: ${err instanceof Error ? err.message : String(err)}`, LogLevel.ERROR);
+      }
+      await wait(config.pollIntervalMs);
     }
-    await new Promise((resolve) => setTimeout(resolve, BOT_POLL_INTERVAL_MS));
+  } catch (err) {
+    log(`Critical failure: ${err instanceof Error ? err.message : String(err)}`, LogLevel.ERROR);
+    process.exit(1);
   }
 }
 
-main();
+if (require.main === module) {
+  main();
+}
