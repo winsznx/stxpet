@@ -1,25 +1,30 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useRef, useEffect } from 'react';
 import { copyToClipboard } from '@/lib/utils/copyToClipboard';
 
-export function useCopyToClipboard(resetMs = 2000): {
-  copied: boolean;
-  copy: (text: string) => Promise<boolean>;
-} {
+/**
+ * Hook to manage copy-to-clipboard state with a temporary "copied" indicator.
+ */
+export function useCopyToClipboard(timeoutMs = 2000) {
   const [copied, setCopied] = useState(false);
+  const timerRef = useRef(null);
 
-  const copy = useCallback(
-    async (text: string) => {
-      const ok = await copyToClipboard(text);
-      if (ok) {
-        setCopied(true);
-        setTimeout(() => setCopied(false), resetMs);
-      }
-      return ok;
-    },
-    [resetMs],
-  );
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
+
+  const copy = useCallback(async (text: string) => {
+    const ok = await copyToClipboard(text);
+    if (ok) {
+      setCopied(true);
+      if (timerRef.current) clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(() => setCopied(false), timeoutMs);
+    }
+    return ok;
+  }, [timeoutMs]);
 
   return { copied, copy };
 }
