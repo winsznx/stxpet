@@ -1,8 +1,15 @@
-type Level = 'info' | 'warn' | 'error';
+export enum LogLevel {
+  INFO = 'INFO',
+  WARN = 'WARN',
+  ERROR = 'ERROR',
+  DEBUG = 'DEBUG',
+}
 
-export function log(level: Level, message: string): void {
-  const line = `[${new Date().toISOString()}] [${level.toUpperCase()}] ${message}`;
-  if (level === 'error') console.error(line);
-  else if (level === 'warn') console.warn(line);
+export function log(message: string, level: LogLevel = LogLevel.INFO): void {
+  const timestamp = new Date().toISOString();
+  const line = `[${timestamp}] [${level}] ${message}`;
+  
+  if (level === LogLevel.ERROR) console.error(line);
+  else if (level === LogLevel.WARN) console.warn(line);
   else console.log(line);
 }
