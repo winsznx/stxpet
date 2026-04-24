@@ -3,27 +3,32 @@
 import { useCallback, useEffect, useState } from 'react';
 import { safeJsonParse } from '@/lib/utils/safeJsonParse';
 
-export function useLocalStorage<T>(key: string, initial: T): [T, (next: T) => void] {
-  const [value, setValue] = useState<T>(initial);
+/**
+ * Type-safe hook for interacting with browser localStorage.
+ */
+export function useLocalStorage<T>(key: string, initialValue: T): [T, (val: T) => void] {
+  const [storedValue, setStoredValue] = useState<T>(initialValue);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const raw = window.localStorage.getItem(key);
-    if (raw !== null) {
-      const parsed = safeJsonParse<T>(raw);
-      if (parsed !== null) setValue(parsed);
+    try {
+      const item = window.localStorage.getItem(key);
+      if (item) {
+        const parsed = safeJsonParse<T>(item);
+        if (parsed !== null) setStoredValue(parsed);
+      }
+    } catch (error) {
+      console.error(`Error reading localStorage key "${key}":`, error);
     }
   }, [key]);
 
-  const set = useCallback(
-    (next: T) => {
-      setValue(next);
-      if (typeof window !== 'undefined') {
-        window.localStorage.setItem(key, JSON.stringify(next));
-      }
-    },
-    [key],
-  );
+  const setValue = useCallback((value: T) => {
+    try {
+      setStoredValue(value);
+      window.localStorage.setItem(key, JSON.stringify(value));
+    } catch (error) {
+      console.error(`Error setting localStorage key "${key}":`, error);
+    }
+  }, [key]);
 
-  return [value, set];
+  return [storedValue, setValue];
 }
