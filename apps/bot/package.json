@@ -6,7 +6,8 @@
     "dev": "ts-node --watch src/index.ts",
     "build": "tsc --noEmit",
     "lint": "eslint src/**/*.ts",
-    "format": "prettier --write src/**/*.ts"
+    "format": "prettier --write src/**/*.ts",
+    "test": "vitest run"
   },
   "dependencies": {
     "@stacks/network": "^7.3.1",
@@ -16,6 +17,7 @@
   "devDependencies": {
     "@types/node": "^20.0.0",
     "ts-node": "^10.9.0",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "vitest": "^2.0.0"
   }
 }
