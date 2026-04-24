@@ -1,25 +1,19 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { LivePetState } from '@winsznx/stxpet-core';
+import { useState, useEffect, useCallback } from 'react';
 import { fetchLiveState } from '@/lib/contract-reads';
+import { LivePetState } from '@winsznx/stxpet-core';
 import { POLL_INTERVAL_MS } from '@/lib/constants';
+import { useInterval } from './useInterval';
 
-interface UsePetStateReturn {
-  petState: LivePetState | null;
-  isLoading: boolean;
-  isDead: boolean;
-  error: string | null;
-  refetch: () => void;
-}
-
-export function usePetState(): UsePetStateReturn {
+/**
+ * Hook to manage and poll the current pet state from the blockchain.
+ * Returns the state, loading status, and interaction helpers.
+ */
+export function usePetState() {
   const [petState, setPetState] = useState<LivePetState | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  const isDead = petState !== null && !petState.isAlive;
 
   const fetchState = useCallback(async () => {
     try {
@@ -35,24 +29,16 @@ export function usePetState(): UsePetStateReturn {
 
   const refetch = useCallback(() => {
     setIsLoading(true);
-    fetchState();
+    return fetchState();
   }, [fetchState]);
 
   useEffect(() => {
     fetchState();
+  }, [fetchState]);
 
-    intervalRef.current = setInterval(() => {
-      if (!isDead) {
-        fetchState();
-      }
-    }, POLL_INTERVAL_MS);
+  const isDead = petState !== null && !petState.isAlive;
 
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [fetchState, isDead]);
+  useInterval(fetchState, isDead ? null : POLL_INTERVAL_MS);
 
   return { petState, isLoading, isDead, error, refetch };
 }
