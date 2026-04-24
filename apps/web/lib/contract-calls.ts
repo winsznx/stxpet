@@ -2,43 +2,28 @@ import { request } from '@stacks/connect';
 import { CONTRACT_DEPLOYER, CONTRACT_NAME, NETWORK } from './constants';
 
 const CONTRACT_ID = `${CONTRACT_DEPLOYER}.${CONTRACT_NAME}` as `${string}.${string}`;
+const network = NETWORK as 'mainnet' | 'testnet';
 
-export async function callFeed(): Promise<{ txId: string }> {
-  const response = await request('stx_callContract', {
-    contract: CONTRACT_ID,
-    functionName: 'feed',
-    functionArgs: [],
-    network: NETWORK as 'mainnet' | 'testnet',
-  });
-  return { txId: response.txid ?? '' };
+interface CallResult {
+  readonly txId: string;
 }
 
-export async function callPlay(): Promise<{ txId: string }> {
-  const response = await request('stx_callContract', {
-    contract: CONTRACT_ID,
-    functionName: 'play',
-    functionArgs: [],
-    network: NETWORK as 'mainnet' | 'testnet',
-  });
-  return { txId: response.txid ?? '' };
+async function safeContractCall(functionName: string, functionArgs: any[] = []): Promise<CallResult> {
+  try {
+    const response = await request('stx_callContract', {
+      contract: CONTRACT_ID,
+      functionName,
+      functionArgs,
+      network,
+    });
+    return { txId: response.txid ?? '' };
+  } catch (error) {
+    console.error(`Contract call "${functionName}" failed:`, error);
+    throw error;
+  }
 }
 
-export async function callSleep(): Promise<{ txId: string }> {
-  const response = await request('stx_callContract', {
-    contract: CONTRACT_ID,
-    functionName: 'sleep',
-    functionArgs: [],
-    network: NETWORK as 'mainnet' | 'testnet',
-  });
-  return { txId: response.txid ?? '' };
-}
-
-export async function callStartNewRound(): Promise<{ txId: string }> {
-  const response = await request('stx_callContract', {
-    contract: CONTRACT_ID,
-    functionName: 'start-new-round',
-    functionArgs: [],
-    network: NETWORK as 'mainnet' | 'testnet',
-  });
-  return { txId: response.txid ?? '' };
-}
+export const callFeed = () => safeContractCall('feed');
+export const callPlay = () => safeContractCall('play');
+export const callSleep = () => safeContractCall('sleep');
+export const callStartNewRound = () => safeContractCall('start-new-round');
