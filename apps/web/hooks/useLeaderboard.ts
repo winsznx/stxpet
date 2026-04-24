@@ -1,23 +1,18 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { fetchLiveState } from '@/lib/contract-reads';
-import { fetchRoundWinner } from '@/lib/contract-reads';
+import { fetchLiveState, fetchRoundWinner } from '@/lib/contract-reads';
 
 interface RoundEntry {
-  roundNumber: number;
-  winner: string;
+  readonly roundNumber: number;
+  readonly winner: string;
 }
 
-interface UseLeaderboardReturn {
-  rounds: RoundEntry[];
-  totalRounds: number;
-  isLoading: boolean;
-  error: string | null;
-}
-
-export function useLeaderboard(): UseLeaderboardReturn {
-  const [rounds, setRounds] = useState<RoundEntry[]>([]);
+/**
+ * Hook to fetch and manage the global survivor leaderboard.
+ */
+export function useLeaderboard() {
+  const [rounds, setRounds] = useState<readonly RoundEntry[]>([]);
   const [totalRounds, setTotalRounds] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -33,18 +28,25 @@ export function useLeaderboard(): UseLeaderboardReturn {
         return;
       }
 
+      // Fetch winners for all completed rounds
       const roundIndices = Array.from({ length: total }, (_, i) => i);
-      const winners = await Promise.all(
-        roundIndices.map(async (roundNum) => {
-          const winner = await fetchRoundWinner(roundNum);
-          return winner ? { roundNumber: roundNum, winner } : null;
+      const results = await Promise.allSettled(
+        roundIndices.map(async (num) => {
+          const winner = await fetchRoundWinner(num);
+          if (!winner) throw new Error(`No winner found for round ${num}`);
+          return { roundNumber: num, winner };
         })
       );
 
-      setRounds(winners.filter((r): r is RoundEntry => r !== null));
+      const successfulRounds = results
+        .filter((r) => r.status === 'fulfilled')
+        .map(r => r.value);
+
+      setRounds(successfulRounds);
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch leaderboard');
+      const msg = err instanceof Error ? err.message : 'Unknown error fetching leaderboard';
+      setError(msg);
     } finally {
       setIsLoading(false);
     }
@@ -52,9 +54,7 @@ export function useLeaderboard(): UseLeaderboardReturn {
 
   useEffect(() => {
     fetchLeaderboard();
-    const interval = setInterval(fetchLeaderboard, 30000);
-    return () => clearInterval(interval);
   }, [fetchLeaderboard]);
 
-  return { rounds, totalRounds, isLoading, error };
+  return { rounds, totalRounds, isLoading, error, refetch: fetchLeaderboard };
 }
