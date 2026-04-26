@@ -42,7 +42,7 @@ export default function HomePage() {
           onNewRound={refetch}
         />
       )}
-      <div
+      <main
         role="main"
         aria-label="Pet interaction area"
         style={{
@@ -101,7 +101,7 @@ export default function HomePage() {
             .link-hover:hover { color: #00ff94 !important; }
           `}</style>
         </div>
-      </div>
+      </main>
     </>
   );
 }
