@@ -1,37 +1,32 @@
-import { CSSProperties, ReactNode } from 'react';
-import { COLORS, FONTS } from '@/lib/constants/theme';
+'use client';
 
-type BadgeTone = 'primary' | 'danger' | 'warning' | 'muted';
-
-const TONE_COLOR: Record<BadgeTone, string> = {
-  primary: COLORS.primary,
-  danger: COLORS.danger,
-  warning: COLORS.warning,
-  muted: COLORS.textMuted,
-};
+import React from 'react';
 
 interface BadgeProps {
-  tone?: BadgeTone;
-  children: ReactNode;
-  style?: CSSProperties;
+  readonly children: React.ReactNode;
+  readonly color?: string;
+  readonly variant?: 'solid' | 'outline';
 }
 
-export function Badge({ tone = 'primary', children, style }: BadgeProps) {
-  const color = TONE_COLOR[tone];
-  return (
-    <span
-      style={{
-        fontFamily: FONTS.display,
-        fontSize: '0.7rem',
-        textTransform: 'uppercase',
-        letterSpacing: '0.1em',
-        padding: '2px 8px',
-        border: `1px solid ${color}`,
-        color,
-        ...style,
-      }}
-    >
-      {children}
-    </span>
-  );
-}
+export const Badge: React.FC<BadgeProps> = ({
+  children,
+  color = '#00ff94',
+  variant = 'outline',
+}) => {
+  const style: React.CSSProperties = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    padding: '2px 8px',
+    borderRadius: 2,
+    fontSize: '0.65rem',
+    fontWeight: 700,
+    fontFamily: "'JetBrains Mono', monospace",
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
+    ...(variant === 'solid'
+      ? { background: color, color: '#0a0a0f' }
+      : { border: `1px solid ${color}`, color }),
+  };
+
+  return <span style={style}>{children}</span>;
+};
