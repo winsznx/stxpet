@@ -8,10 +8,12 @@
     "lint": "turbo run lint",
     "format": "turbo run format",
     "bot:start": "pnpm --filter stxpet-bot start",
-    "publish:core": "pnpm --filter @winsznx/stxpet-core publish --access public"
+    "publish:core": "pnpm --filter @winsznx/stxpet-core publish --access public",
+    "prepare": "husky"
   },
   "devDependencies": {
     "turbo": "^2.4.0",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "husky": "^9.0.0"
   }
 }
