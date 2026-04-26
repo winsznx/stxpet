@@ -1,31 +1,30 @@
 'use client';
 
-import { HIRO_API_BASE } from '@/lib/constants';
+import React from 'react';
+import { AddressLink } from '../ui/AddressLink';
 
 interface RoundEntry {
-  roundNumber: number;
-  winner: string;
+  readonly roundNumber: number;
+  readonly winner: string;
 }
 
 interface SurvivorTableProps {
-  rounds: RoundEntry[];
+  readonly rounds: readonly RoundEntry[];
 }
 
-function truncateAddress(address: string): string {
-  return `${address.slice(0, 6)}…${address.slice(-4)}`;
-}
-
-export function SurvivorTable({ rounds }: SurvivorTableProps) {
+export const SurvivorTable: React.FC<SurvivorTableProps> = ({ rounds }) => {
   if (rounds.length === 0) {
     return (
-      <p style={{ fontFamily: "'Syne', sans-serif", color: '#5a5a7a', textAlign: 'center' }}>
-        No rounds completed yet.
-      </p>
+      <div style={{ padding: '40px 0', textAlign: 'center' }}>
+        <p style={{ fontFamily: "'Syne', sans-serif", color: '#5a5a7a', fontSize: '1.1rem' }}>
+          The history of survivors is empty.
+        </p>
+      </div>
     );
   }
 
   return (
-    <div style={{ overflowX: 'auto' }}>
+    <div style={{ overflowX: 'auto', borderRadius: 4, background: 'rgba(255,255,255,0.02)' }}>
       <table
         style={{
           width: '100%',
@@ -38,12 +37,12 @@ export function SurvivorTable({ rounds }: SurvivorTableProps) {
             <th
               style={{
                 textAlign: 'left',
-                padding: '12px 16px',
+                padding: '16px',
                 color: '#5a5a7a',
                 fontSize: '0.75rem',
                 textTransform: 'uppercase',
-                letterSpacing: '0.1em',
-                borderBottom: '1px solid rgba(255,255,255,0.06)',
+                letterSpacing: '0.15em',
+                borderBottom: '1px solid rgba(255,255,255,0.08)',
               }}
             >
               Round
@@ -51,54 +50,48 @@ export function SurvivorTable({ rounds }: SurvivorTableProps) {
             <th
               style={{
                 textAlign: 'left',
-                padding: '12px 16px',
+                padding: '16px',
                 color: '#5a5a7a',
                 fontSize: '0.75rem',
                 textTransform: 'uppercase',
-                letterSpacing: '0.1em',
-                borderBottom: '1px solid rgba(255,255,255,0.06)',
+                letterSpacing: '0.15em',
+                borderBottom: '1px solid rgba(255,255,255,0.08)',
               }}
             >
-              Survivor
+              Survivor Address
             </th>
           </tr>
         </thead>
         <tbody>
-          {rounds.map((round) => (
-            <tr key={round.roundNumber}>
+          {[...rounds].reverse().map((round) => (
+            <tr key={round.roundNumber} style={{ transition: 'background 0.2s' }} className="row-hover">
               <td
                 style={{
-                  padding: '12px 16px',
+                  padding: '16px',
                   color: '#e8e8f0',
-                  fontSize: '0.9rem',
-                  borderBottom: '1px solid rgba(255,255,255,0.03)',
+                  fontSize: '0.95rem',
+                  borderBottom: '1px solid rgba(255,255,255,0.04)',
                 }}
               >
                 #{round.roundNumber}
               </td>
               <td
                 style={{
-                  padding: '12px 16px',
-                  borderBottom: '1px solid rgba(255,255,255,0.03)',
+                  padding: '16px',
+                  borderBottom: '1px solid rgba(255,255,255,0.04)',
                 }}
               >
-                <a
-                  href={`https://explorer.hiro.so/address/${round.winner}?chain=mainnet`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    color: '#00ff94',
-                    textDecoration: 'none',
-                    fontSize: '0.9rem',
-                  }}
-                >
-                  {truncateAddress(round.winner)}
-                </a>
+                <AddressLink address={round.winner} />
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <style>{`
+        .row-hover:hover {
+          background: rgba(255,255,255,0.03);
+        }
+      `}</style>
     </div>
   );
-}
+};
