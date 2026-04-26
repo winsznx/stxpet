@@ -1,123 +1,62 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { connect, disconnect, isConnected } from '@stacks/connect';
 import { userSession } from './session';
+import { Button } from '../ui/Button';
 
-function truncateAddress(address: string): string {
-  return `${address.slice(0, 6)}...${address.slice(-4)}`;
-}
-
-function getAddress(): string | null {
-  try {
-    if (userSession.isUserSignedIn()) {
-      return userSession.loadUserData().profile.stxAddress.mainnet;
-    }
-  } catch {
-    // not signed in
-  }
-  return null;
-}
-
-export function WalletConnectButton() {
-  const [connected, setConnected] = useState(false);
+export const WalletConnectButton: React.FC = () => {
+  const [mounted, setMounted] = useState(false);
   const [address, setAddress] = useState<string | null>(null);
 
-  useEffect(() => {
-    const walletConnected = isConnected();
-    setConnected(walletConnected);
-    if (walletConnected) {
-      setAddress(getAddress());
+  const updateAddress = useCallback(() => {
+    try {
+      if (userSession.isUserSignedIn()) {
+        setAddress(userSession.loadUserData().profile.stxAddress.mainnet);
+      } else {
+        setAddress(null);
+      }
+    } catch {
+      setAddress(null);
     }
   }, []);
 
-  async function handleConnect() {
+  useEffect(() => {
+    setMounted(true);
+    if (isConnected()) {
+      updateAddress();
+    }
+  }, [updateAddress]);
+
+  const handleConnect = async () => {
     try {
       await connect();
-      setConnected(true);
-      setAddress(getAddress());
-    } catch {
-      // user cancelled
+      updateAddress();
+    } catch (err) {
+      console.warn('Wallet connection cancelled');
     }
-  }
+  };
 
-  function handleDisconnect() {
+  const handleDisconnect = () => {
     disconnect();
-    setConnected(false);
     setAddress(null);
     window.location.reload();
-  }
+  };
 
-  if (connected && address) {
+  if (!mounted) return <div style={{ width: 140, height: 40 }} />;
+
+  if (address) {
+    const displayAddr = `${address.slice(0, 6)}...${address.slice(-4)}`;
     return (
-      <button
-        onClick={handleDisconnect}
-        style={{
-          fontFamily: "'JetBrains Mono', monospace",
-          fontSize: '0.85rem',
-          padding: '8px 16px',
-          background: 'transparent',
-          color: '#00ff94',
-          border: '1px solid #00ff94',
-          cursor: 'pointer',
-          boxShadow: '4px 4px 0px #00ff94',
-          transition: 'all 0.1s ease',
-        }}
-        onMouseDown={(e) => {
-          e.currentTarget.style.transform = 'translate(4px, 4px)';
-          e.currentTarget.style.boxShadow = '0px 0px 0px #00ff94';
-        }}
-        onMouseUp={(e) => {
-          e.currentTarget.style.transform = 'translate(2px, 2px)';
-          e.currentTarget.style.boxShadow = '2px 2px 0px #00ff94';
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'translate(2px, 2px)';
-          e.currentTarget.style.boxShadow = '2px 2px 0px #00ff94';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'translate(0, 0)';
-          e.currentTarget.style.boxShadow = '4px 4px 0px #00ff94';
-        }}
-      >
-        {truncateAddress(address)}
-      </button>
+      <Button variant="outline" onClick={handleDisconnect} color="#00ff94">
+        {displayAddr}
+      </Button>
     );
   }
 
   return (
-    <button
-      onClick={handleConnect}
-      style={{
-        fontFamily: "'JetBrains Mono', monospace",
-        fontSize: '0.85rem',
-        padding: '8px 16px',
-        background: '#00ff94',
-        color: '#0a0a0f',
-        border: '1px solid #00ff94',
-        cursor: 'pointer',
-        fontWeight: 700,
-        boxShadow: '4px 4px 0px #00ff94',
-        transition: 'all 0.1s ease',
-      }}
-      onMouseDown={(e) => {
-        e.currentTarget.style.transform = 'translate(4px, 4px)';
-        e.currentTarget.style.boxShadow = '0px 0px 0px #00ff94';
-      }}
-      onMouseUp={(e) => {
-        e.currentTarget.style.transform = 'translate(2px, 2px)';
-        e.currentTarget.style.boxShadow = '2px 2px 0px #00ff94';
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'translate(2px, 2px)';
-        e.currentTarget.style.boxShadow = '2px 2px 0px #00ff94';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = 'translate(0, 0)';
-        e.currentTarget.style.boxShadow = '4px 4px 0px #00ff94';
-      }}
-    >
+    <Button variant="solid" onClick={handleConnect} color="#00ff94">
       Connect Wallet
-    </button>
+    </Button>
   );
-}
+};
