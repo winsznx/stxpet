@@ -11,8 +11,10 @@ const network = NETWORK === 'mainnet' ? STACKS_MAINNET : STACKS_TESTNET;
 
 // Basic in-memory cache for round winners
 const winnerCache = new Map<number, string>();
+const liveStateCache: { state: any; timestamp: number } = { state: null, timestamp: 0 };
 
 export async function fetchLiveState(): Promise<LivePetState> {
+  if (liveStateCache.state && Date.now() - liveStateCache.timestamp < 5000) return liveStateCache.state;
   const result = await fetchCallReadOnlyFunction({
     contractAddress: CONTRACT_DEPLOYER,
     contractName: CONTRACT_NAME,
@@ -23,7 +25,10 @@ export async function fetchLiveState(): Promise<LivePetState> {
   });
 
   const raw = parsePetState(result);
-  return computeCurrentMeters(raw, raw.currentBlock);
+  const finalState = computeCurrentMeters(raw, raw.currentBlock);
+  liveStateCache.state = finalState;
+  liveStateCache.timestamp = Date.now();
+  return finalState;
 }
 
 export async function fetchRoundWinner(round: number): Promise<string | null> {
