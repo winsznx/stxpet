@@ -26,6 +26,8 @@ async function runCycle(config: ReturnType<typeof loadConfig>): Promise<void> {
 }
 
 async function main() {
+  process.on("SIGINT", () => { console.log("Shutting down gracefully..."); process.exit(0); });
+
   try {
     const config = loadConfig();
     log('StxPet Bot started');
