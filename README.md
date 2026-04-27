@@ -238,3 +238,7 @@ pnpm turbo run build
 ## Design
 
 `#0a0a0f` background. `#00ff94` primary. JetBrains Mono + Syne. Brutalist hard-shadow buttons. CRT scanline texture. No gradients.
+
+## Architecture
+
+The monorepo is divided into core smart contract interfaces, a bot, and a web application.
