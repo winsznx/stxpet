@@ -1,3 +1,4 @@
+[![CI](https://github.com/winsznx/stxpet/actions/workflows/ci.yml/badge.svg)](https://github.com/winsznx/stxpet/actions)
 # StxPet
 
 A collaborative on-chain Tamagotchi living on Stacks Mainnet. One pet. Three meters. Any wallet can feed it, play with it, or put it to sleep. Let any meter hit zero and the pet dies — the last person to touch it wins a non-transferable SIP-009 survivor badge. The contract resets and a new round begins.
