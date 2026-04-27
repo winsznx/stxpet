@@ -28,7 +28,7 @@ export function usePetState() {
   }, []);
 
   const refetch = useCallback(() => {
-    setIsLoading(true);
+    if (!petState) setIsLoading(true);
     return fetchState();
   }, [fetchState]);
 
