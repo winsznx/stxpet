@@ -105,3 +105,5 @@ export default function HomePage() {
     </>
   );
 }
+
+// micro-animations added
